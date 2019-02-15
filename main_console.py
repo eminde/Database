@@ -1,5 +1,4 @@
 
-
 from Bank import Bank
 import os
 
@@ -10,7 +9,7 @@ def cls():
 
 
  
-def get_client_console():
+def get_client_console(bank):
     print("Adding client:")
     fname = input("Pleas enter clients first name:")
 
@@ -27,8 +26,8 @@ def get_client_console():
         except ValueError:
                 print("Deposit Input Is Invalid, Please Enter a Positive number")
                 
-
-    return fname , lname , deposit
+    bank.add_client(fname,lname,deposit)
+    print("Client Added!")
 
 
 def get_user_input_console():
@@ -42,7 +41,45 @@ def get_user_input_console():
     user_input= int(input("Enter a Number:"))
     return user_input
 
+def delete_client_console(bank):
+    id = None
+    while id is None:
+        try:
+            val = int(input("Please enter Clients ID:"))
+            val -=1
+            if val < 0:
+                raise ValueError
+            if val> len(bank.get_clients())-1:
+                raise ValueError
+            id = val
+        except ValueError:
+                print("ID Input Is Invalid, Please Enter a Positive number")
 
+    client_name =bank.get_clients()[id].get_fname()+" "+bank.get_clients()[id].get_lname()
+
+    msg = "Are You Sure You Want to Delete Client "+client_name+"\n"
+    yes = {'yes','y','are','bale'}
+    no = {'no','n','na'}
+
+    ans = None
+
+    while ans==None:
+        try :
+            ans = input(msg).lower()
+            if ans in yes:
+                bank.del_client(id)
+                print("Client " , client_name ,"has Been Deleted!")
+                
+            elif ans in no :
+                print("Process Been Canceled")
+            else:
+                ans =None
+                raise ValueError
+        except:
+                print("Invalid Input!! Please Enter Yes/No")
+
+   
+                
 
 def print_clients_console(bank ,key):
     client_list = bank.get_clients(sort_by = key)
@@ -105,23 +142,30 @@ def main():
         user_input = get_user_input_console()
 
         if (user_input==1):
-            cls()
+            
             # Add a client
-            client = get_client_console()
-            bank.add_client(client[0],client[1],client[2])
-            print("Client Added!")
-            dummy = input("Press Enter to continue...")
+            cls()
+            get_client_console(bank)
+            
+            dummy = input("\nPress Enter to continue...")
             cls()
 
         elif (user_input==2):
             #Delete a client
-            bank.del_client()
+            cls()
+            delete_client_console(bank)
+
+            dummy = input("\nPress Enter to continue...")
+            cls()
+
+
+
         elif (user_input==3):
             #Print Banks Records(Sorted By ID)
             cls()
             print("Print Clients Records Sorted By ID")
             print_clients_console(bank ,key = "id")
-            dummy = input("Press Enter to continue...")
+            dummy = input("\nPress Enter to continue...")
             cls()
             pass
         elif (user_input==4):
@@ -129,7 +173,7 @@ def main():
             cls()
             print("Print Clients Records Sorted By Name")
             print_clients_console(bank,key = "name")
-            dummy = input("Press Enter to continue...")
+            dummy = input("\nPress Enter to continue...")
             cls()
             pass
 
@@ -138,7 +182,7 @@ def main():
             cls()
             print("Print Clients Records Sorted By Balance")
             print_clients_console(bank,key = "balance")
-            dummy = input("Press Enter to continue...")
+            dummy = input("\nPress Enter to continue...")
             cls()
             pass
 
@@ -146,7 +190,7 @@ def main():
             #Print Banks Assets
             cls()
             print_bank_assets_console(bank)
-            dummy = input("Press Enter to continue...")
+            dummy = input("\nPress Enter to continue...")
             cls()
         elif (user_input==7):
             #Exit

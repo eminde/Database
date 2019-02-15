@@ -11,8 +11,11 @@ class Bank :
         client = Client(self.get_id(),fname,lname,deposit)
         self.clients.append(client)
 
-    def del_client(self):
-        pass
+    def del_client(self,id):
+        self.clients.pop(id)
+        for i in range(id,len(self.clients)):
+            self.clients[i].set_id(i)
+          
     
     def get_assets(self):
         assets = 0

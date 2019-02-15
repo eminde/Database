@@ -17,6 +17,8 @@ class Client:
     
     def get_fname(self):
         return self.fname
-        
+
     def get_id(self):
         return self.id
+    def set_id(self,id):
+        self.id= id
